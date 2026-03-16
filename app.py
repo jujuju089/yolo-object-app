@@ -1,28 +1,40 @@
-import cv2
+from flask import Flask, render_template, request
 from ultralytics import YOLO
+import os
+from PIL import Image
 
-# YOLO Modell laden
+app = Flask(__name__)
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 model = YOLO("yolov8n.pt")
 
-# Webcam starten
-cap = cv2.VideoCapture(0)
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
-while True:
-    ret, frame = cap.read()
-    
-    if not ret:
-        break
+@app.route("/", methods=["GET", "POST"])
+def index():
+    result = None
+    filename = None
 
-    # Objekte erkennen
-    results = model(frame)
+    if request.method == "POST":
+        file = request.files["image"]
 
-    # Ergebnisse zeichnen
-    annotated_frame = results[0].plot()
+        if file:
+            filepath = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+            file.save(filepath)
 
-    cv2.imshow("YOLO Object Detection", annotated_frame)
+            results = model(filepath)
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+            objects = []
+            for r in results:
+                for c in r.boxes.cls:
+                    objects.append(model.names[int(c)])
 
-cap.release()
-cv2.destroyAllWindows()
+            result = list(set(objects))
+            filename = file.filename
+
+    return render_template("index.html", result=result, filename=filename)
+
+if __name__ == "__main__":
+    app.run(debug=True)
