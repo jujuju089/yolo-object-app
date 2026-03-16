@@ -39,4 +39,7 @@ if __name__ == "__main__":
     
 if __name__ == "__main__":
 
-    app.run(host="0.0.0.0", port=8000, debug=False)
+import random
+port = random.randint(3000, 9000)
+app.run(host="127.0.0.1", port=port, debug=False, use_reloader=False)
+print(f"Server läuft auf http://127.0.0.1:{port}")
