@@ -39,13 +39,12 @@ def index():
 # ------------------------------------------------------------
 # START DER APP
 # ------------------------------------------------------------
+
 if __name__ == "__main__":
-    import random
+    import random  # <- unbedingt 4 Leerzeichen eingerückt
 
     # zufälliger Port zwischen 3000–9000
     port = random.randint(3000, 9000)
 
     print(f"Server läuft auf http://127.0.0.1:{port}")
-    # debug=False + use_reloader=False verhindert doppelte Prozesse / Portprobleme
     app.run(host="127.0.0.1", port=port, debug=False, use_reloader=False)
-
