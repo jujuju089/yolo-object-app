@@ -35,11 +35,8 @@ def index():
             filename = file.filename
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False, use_reloader=False)
-    
-if __name__ == "__main__":
-
-import random
-port = random.randint(3000, 9000)
-app.run(host="127.0.0.1", port=port, debug=False, use_reloader=False)
-print(f"Server läuft auf http://127.0.0.1:{port}")
+    import random
+    # zufälliger Port zwischen 3000–9000
+    port = random.randint(3000, 9000)
+    print(f"Server läuft auf http://127.0.0.1:{port}")
+    app.run(host="127.0.0.1", port=port, debug=False, use_reloader=False)
