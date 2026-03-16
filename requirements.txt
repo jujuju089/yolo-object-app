@@ -1,5 +1,4 @@
-yolo-object-app
-│
-├── app.py
-├── requirements.txt
-└── README.md
+flask
+ultralytics
+opencv-python
+pillow
